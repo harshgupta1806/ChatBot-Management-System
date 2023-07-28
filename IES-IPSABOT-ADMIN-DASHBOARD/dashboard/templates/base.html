@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+    <!-- plugins:css -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css' ) }}">
+
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/base.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/ies-logo-blur.png') }}"/>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center flex-wrap">
+            <a class="navbar-brand brand-logo" href="https://ies.ipsacademy.org"><img
+                    src="{{ url_for('static', filename='assets/images/ies-logo-2020.png') }}" class="mt-2 w-100 h-100"/>
+                <br>
+
+            </a>
+            <a class="navbar-brand brand-logo-mini text-sm text-center display-5" href="https://ies.ipsacademy.org">@iesipsabot</a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <div class="nav-profile-img">
+                            <img src="{{ current_user.image_url }}" alt="signed-in-user-image">
+                            <span class="availability-status online"></span>
+                        </div>
+
+                        <div class="nav-profile-text">
+                            <p class="mb-1 text-black">{{ current_user.first_name }}&nbsp;{{ current_user.last_name }}</p>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item" href="#">
+                            <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('logout') }}" title="sign-out">
+                            <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+                    </div>
+                </li>
+                <li class="nav-item d-none d-lg-block full-screen-link" title="toggle full-screen mode">
+                    <a class="nav-link">
+                        <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item nav-logout d-none d-lg-block" title="sign-out">
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="mdi mdi-power"></i>
+                    </a>
+                </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    data-toggle="offcanvas">
+                <span class="mdi mdi-menu"></span>
+            </button>
+        </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas " id="sidebar">
+            <ul class="nav ">
+                <li class="nav-item nav-profile">
+                    <a href="#" class="nav-link">
+                        <div class="nav-profile-image">
+                            <img src="{{ current_user.image_url }}" alt="profile">
+                            <span class="login-status online"></span>
+                            <!--change to offline or busy as needed-->
+                        </div>
+                        <div class="nav-profile-text d-flex flex-column">
+                            <span class="font-weight-bold mb-2">{{ current_user.first_name }}&nbsp;{{ current_user.last_name }}</span>
+                            <span class="text-secondary text-small">{{ current_user.designation }}</span>
+                        </div>
+                        <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home_page') }}">
+                        <span class="menu-title">Home</span>
+                        <i class="mdi mdi-home menu-icon"></i>
+                    </a>
+                </li>
+                {% if current_user.designation == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users_page') }}">
+                            <span class="menu-title">Chatbot Users</span>
+                            <i class="mdi mdi-account-multiple menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('students_page') }}">
+                            <span class="menu-title">Student Details</span>
+                            <i class="mdi mdi-school menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('campus_guide_page') }}">
+                            <span class="menu-title">Campus Guide</span>
+                            <i class="mdi mdi-map-marker-circle menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register_page') }}">
+                            <span class="menu-title">Add Users</span>
+                            <i class="mdi mdi-account-plus menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('trigger_schedulers_page') }}">
+                        <span class="menu-title">Trigger Schedulers</span>
+                        <i class="mdi mdi-alarm-multiple menu-icon"></i>
+                    </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('notes_page') }}">
+                        <span class="menu-title">Notes-System</span>
+                        <i class="mdi mdi-library-books menu-icon"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('alerts_page') }}">
+                        <span class="menu-title">Alert System</span>
+                        <i class="mdi mdi-alert-circle-outline menu-icon"></i>
+                    </a>
+                </li>
+
+
+            </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel p-2">
+            <div class="content-wrapper overflow-auto p-2 bg-light">
+                {% block content %}
+
+                {% endblock content %}
+            </div>
+            <!-- content-wrapper ends -->
+            <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+
+<!-- plugins:js -->
+<script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js') }}"></script>
+<!-- End plugins:js-->
+
+
+<!-- Plugin js for this page -->
+{% block plugin_js %}
+
+{% endblock %}
+<!-- End plugin js for this page -->
+
+
+<!-- inject:js -->
+<script src="{{ url_for('static', filename='assets/js/off-canvas.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/misc.js') }}"></script>
+
+{% block inject_js %}
+
+{% endblock %}
+<!-- end inject -->
+
+
+<!-- Custom js for this page -->
+{% block custom_js %}
+
+{% endblock %}
+<!-- End custom js for this page -->
+
+
+</body>
+</html>

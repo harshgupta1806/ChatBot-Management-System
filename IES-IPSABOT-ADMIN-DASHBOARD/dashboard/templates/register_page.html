@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Register User
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container-scroller">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div>
+                    {% for category, message in messages %}
+                        <div class="text-center alert alert-{{ category }} alert-dismissible fade show"
+                             role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="container page-body-wrapper full-page-wrapper  d-flex align-items-start auth">
+
+
+            <div class="row flex-grow">
+                <div class="col-lg-12 mx-auto">
+                    <div class="auth-form-light text-left p-5">
+                        <div class="brand-logo">
+                            <h4 class="display-4">ADD USERS!!</h4>
+                            <h6 class="lead">Fill the following details carefully! All fields are
+                                mandatory.*</h6>
+                        </div>
+                        <form class="pt-3" id="register" method="POST" action="{{ url_for('register_page') }}">
+                            {{ form.hidden_tag() }}
+
+                            <div class="form-group">
+                                {{ form.username(class="form-control form-control-sm  text-dark  border-dark", placeholder="Username") }}
+                            </div>
+
+                            <div class="form-group input-group">
+                                {{ form.first_name(class="form-control form-control-sm  text-dark  border-dark", placeholder="First Name") }}
+                                {{ form.last_name(class="form-control form-control-sm  text-dark  border-dark", placeholder="Last Name") }}
+                            </div>
+
+
+                            <div class="form-group">
+                                {{ form.designation(class="form-control form-control-lg border-dark text-dark ") }}
+                                <br>
+                                {{ form.image_url(class="form-control form-control-lg border-dark text-dark ", placeholder="Add Your Avatar URL --optional") }}
+                                <br>
+                                {{ form.password(class="form-control form-control-sm  text-dark  border-dark", placeholder="Password") }}
+                                <br>
+                                {{ form.confirm_password(class="form-control form-control-sm  text-dark border-dark", placeholder="Re-enter Your Password") }}
+                            </div>
+
+
+                            <div class="mt-3 text-center">
+                                {{ form.submit(class="btn btn-block btn-info btn-lg font-weight-medium auth-form-btn") }}
+                            </div>
+
+                            <br>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- page-body-wrapper ends -->
+    </div>
+
+{% endblock %}

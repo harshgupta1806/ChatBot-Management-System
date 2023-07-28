@@ -1,0 +1,422 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    FACULTY DETAILS
+{% endblock %}
+
+{% block content %}
+    <!-- ALERT MESSAGES START-->
+    <div class="text-center alert alert-info"
+         role="alert" id="faculty-loader" hidden>
+        Please Wait ....
+    </div>
+    <div class="text-center alert alert-success"
+         role="alert" id="faculty-added-success" hidden>
+        Faculty Detail Has Been Added Successfully. Please reload to see the changes!
+    </div>
+    <div class="text-center alert alert-danger"
+         role="alert" id="faculty-added-danger" hidden>
+        Faculty Detail Could Not Be Added. Please Try Again Later.
+    </div>
+    <div class="text-center alert alert-success"
+         role="alert" id="faculty-deleted-success" hidden>
+        Faculty Detail Has Been Deleted Successfully. Please reload to see the changes!
+    </div>
+    <div class="text-center alert alert-danger"
+         role="alert" id="faculty-deleted-danger" hidden>
+        Faculty Detail Could Not Be Deleted. Please Try Again Later.
+    </div>
+    <div class="text-center alert alert-success"
+         role="alert" id="faculty-updated-success" hidden>
+        Faculty Detail Has Been Updated Successfully. Please reload to see the changes!
+    </div>
+    <div class="text-center alert alert-danger"
+         role="alert" id="faculty-updated-danger" hidden>
+        Faculty Detail Could Not Be Updated. Please Try Again Later.
+    </div>
+    <!-- ALERT MESSAGES END-->
+
+    <br>
+
+    <!-- MODALS START-->
+    <div>
+
+        <!--  trigger ADD FACULTY modal -->
+        <button type="button" class="btn btn-primary p-2" data-toggle="modal" data-target="#addFacultyModal">
+            <em class="mdi mdi-plus-circle text-center bg-gradient-primary"></em>ADD FACULTY DETAILS
+        </button>
+
+        <!-- ADD FACULTY Modal -->
+        <div class="modal fade" id="addFacultyModal" tabindex="-1" role="dialog" aria-labelledby="addFacultyModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addFacultyModalLabel">Add Faculty Detail in Campus-Guide</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                id="addFacultyModalCloseBtn">
+                            <span aria-hidden="true" class="mdi bg-danger text-light border-0 mdi-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <select id="faculty-title" class="form-control form-control-lg border-dark text-dark "
+                                    required>
+                                <option value="Mr." selected>Mr.</option>
+                                <option value="Dr.">Dr.</option>
+                                <option value="Mrs.">Mrs.</option>
+                                <option value="Ms.">Ms.</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+
+                            <div class="form-group input-group">
+
+                                <input type="text" id="faculty-first-name"
+                                       class="form-control form-control-lg border-dark text-dark "
+                                       placeholder="First Name"
+                                       required>
+                                <input type="text" id="faculty-last-name"
+                                       class="form-control form-control-lg border-dark text-dark "
+                                       placeholder="Last Name"
+                                       required>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact">Contact Details</label>
+
+                            <div class="form-group input-group">
+                                <input type="text"
+                                       class="w-25 text-center font-weight-bold bg-gradient-primary text-light"
+                                       value="+91" readonly>
+
+                                <input type="text" id="faculty-contact"
+                                       class="w-75 rm-control form-control-lg text-dark "
+                                       required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Details</label>
+
+                            <input type="email" id="faculty-email"
+                                   class="form-control form-control-lg border-dark text-dark "
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cabin">Cabin Details</label>
+
+                            <input type="text" id="faculty-cabin"
+                                   class="form-control form-control-lg border-dark text-dark "
+                                   placeholder="Room No. / Lab No. / Floor / Block"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="designation">Designation</label>
+
+                            <select id="faculty-designation" class="form-control form-control-lg border-dark text-dark "
+                                    required>
+                                <option value="HOD" selected>Head of Department</option>
+                                <option value="Professor">Professor</option>
+                                <option value="Associate Professor">Associate Professor</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="department">Department</label>
+
+                            <select id="faculty-department" class="form-control form-control-lg border-dark text-dark "
+                                    required>
+                                <option value="cse" selected>CSE</option>
+                                <option value="ft.">FT & SAFETY ENGG.</option>
+                                <option value="ec">ELECTRONICS ENGG.</option>
+                                <option value="electrical">ELECTRICAL ENGG.</option>
+                                <option value="mechanical">MECHANICAL ENGG.</option>
+                                <option value="civil">CIVIL ENGG.</option>
+                                <option value="chemical">CHEMICAL ENGG.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger p-2 border-danger" data-dismiss="modal">Close
+                        </button>
+                        <button type="button" class="btn btn-success p-2 border-dark" id="add-faculty-btn">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+        <!--  trigger ADD FACULTY modal -->
+        <button type="button" class="btn btn-primary p-2" data-toggle="modal" data-target="#editFacultyModal" id="editFacultyModalOpenBtn" hidden>
+            <em class="mdi mdi-plus-circle text-center bg-gradient-primary"></em>EDIT FACULTY DETAILS
+        </button>
+
+        <!-- ADD FACULTY Modal -->
+        <div class="modal fade w-100" id="editFacultyModal" tabindex="-1" role="dialog"
+             aria-labelledby="editFacultyModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editFacultyModalLabel">Edit Faculty Detail in Campus-Guide</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                id="editFacultyModalCloseBtn">
+                            <span aria-hidden="true" class="mdi bg-danger text-light border-0 mdi-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title">Updated Title</label>
+                            <select id="faculty-title-edit" class="form-control form-control-sm border-dark text-dark "
+                                    required>
+                                <option value="Mr." selected>Mr.</option>
+                                <option value="Dr.">Dr.</option>
+                                <option value="Mrs.">Mrs.</option>
+                                <option value="Ms.">Ms.</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">New Name</label>
+
+                            <div class="form-group input-group">
+
+                                <input type="text" id="faculty-first-name-edit"
+                                       class="form-control form-control-sm border-dark text-dark "
+                                       placeholder="Updated First Name"
+                                       required>
+                                <input type="text" id="faculty-last-name-edit"
+                                       class="form-control form-control-sm border-dark text-dark "
+                                       placeholder="Updated Last Name"
+                                       required>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact">New Contact Details</label>
+
+                            <div class="form-group input-group">
+                                <input type="text"
+                                       class="w-25 text-center  form-control-sm font-weight-bold bg-gradient-primary text-light"
+                                       value="+91" readonly>
+
+                                <input type="text" id="faculty-contact-edit"
+                                       class="w-75  form-control-sm text-dark "
+                                       required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">New Email Details</label>
+
+                            <input type="email" id="faculty-email-edit"
+                                   class="form-control form-control-sm border-dark text-dark "
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cabin">New Cabin Details</label>
+
+                            <input type="text" id="faculty-cabin-edit"
+                                   class="form-control form-control-sm border-dark text-dark "
+                                   placeholder="Room No. / Lab No. / Floor / Block"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="designation">New Designation</label>
+
+                            <select id="faculty-designation-edit"
+                                    class="form-control form-control-sm border-dark text-dark "
+                                    required>
+                                <option value="HOD" selected>Head of Department</option>
+                                <option value="Professor">Professor</option>
+                                <option value="Associate Professor">Associate Professor</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="department">New Department</label>
+
+                            <select id="faculty-department-edit"
+                                    class="form-control form-control-sm border-dark text-dark "
+                                    required>
+                                <option value="cse" selected>CSE</option>
+                                <option value="ft.">FT & SAFETY ENGG.</option>
+                                <option value="ec">ELECTRONICS ENGG.</option>
+                                <option value="electrical">ELECTRICAL ENGG.</option>
+                                <option value="mechanical">MECHANICAL ENGG.</option>
+                                <option value="civil">CIVIL ENGG.</option>
+                                <option value="chemical">CHEMICAL ENGG.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger p-2 border-danger" data-dismiss="modal">Close
+                        </button>
+                        <button type="button" class="btn btn-success p-2 border-dark" id="edit-faculty-btn">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODALS END-->
+    <br>
+    <br>
+    <!-- TABLE START-->
+
+    <table id="facultyTable"
+           class="table table-striped table-hover table-responsive-sm table-responsive-md table-responsive-lg mx-2">
+        <thead>
+        <tr class="bg-primary text-light">
+            <th scope="col">No.</th>
+            <th scope="col">Title</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Designation</th>
+            <th scope="col">Contact</th>
+            <th scope="col">Email</th>
+            <th scope="col" class="text-center">Cabin</th>
+            <th scope="col" class="text-center">Action</th>
+        </tr>
+        </thead>
+
+        <tbody id="facultyTableBody">
+        {% if faculty is none or faculty|length == 0 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        {% else %}
+            {% for faculty_data in faculty %}
+                <tr id="faculty-row-{{ loop.index }}">
+
+                    <td>{{ loop.index }}</td>
+
+                    <td id="title-{{ loop.index }}">{{ faculty_data['title'] }}</td>
+                    <td id="first-name-{{ loop.index }}">{{ faculty_data['first_name'] }}</td>
+                    <td id="last-name-{{ loop.index }}">{{ faculty_data['last_name'] }}</td>
+                    <td id="department-{{ loop.index }}">{{ faculty_data['department'] }}</td>
+                    <td id="designation-{{ loop.index }}">{{ faculty_data['designation'] }}</td>
+                    <td id="contact-{{ loop.index }}">{{ faculty_data['contact'] }}</td>
+                    <td id="email-{{ loop.index }}">{{ faculty_data['email'] }}</td>
+                    <td id="cabin-{{ loop.index }}">{{ faculty_data['cabin'] }}</td>
+
+                    <td class=" text-center" id="{{ loop.index }}">
+                        <span class="btn btn-warning edit-faculty-button">
+                            <em class="mdi mdi-pencil-circle"></em>&nbsp;EDIT</span>
+                        <span class="btn btn-danger delete-faculty-button">
+                            <em class="mdi mdi-delete-forever"></em>&nbsp;DELETE
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+
+        </tbody>
+    </table>
+    <!-- TABLE ENDS-->
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        #facultyTable a.btn:hover {
+            transition: all 0.3s ease-in;
+            transform: scale(1.1);
+        }
+
+        input[type="search"] {
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.3rem !important;
+        }
+
+        td {
+            text-transform: capitalize;
+        }
+
+        td:nth-last-child(2) {
+            text-align: center !important;
+        }
+    </style>
+
+{% endblock %}
+
+{% block plugin_js %}
+    <!-- Bootstrap js -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+
+    <!-- Datatable plugin -->
+
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+{% endblock %}
+
+{% block custom_js %}
+    <script>
+        {#const DELETE_USER_URL = 'http://127.0.0.1:8000/user';#}
+        {#document.getElementById('user-loader').hidden = true;#}
+        {#document.getElementById('user-deleted-success').hidden = true;#}
+        {#document.getElementById('user-deleted-danger').hidden = true;#}
+
+        $(document).ready(function () {
+            $('#facultyTable').DataTable();
+        });
+
+        {#const deleteFaculty = (chatId) => {#}
+        {#    console.log(chatId);#}
+        {#    document.getElementById('faculty-loader').hidden = false;#}
+        {##}
+        {#    let xhr = new XMLHttpRequest();#}
+        {#    xhr.open('DELETE', DELETE_USER_URL);#}
+        {#    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');#}
+        {#    xhr.addEventListener('load', () => {#}
+        {#        document.getElementById('user-loader').hidden = true;#}
+        {##}
+        {#        const response = JSON.parse(xhr.responseText)['result'];#}
+        {#        if (response) {#}
+        {#            document.getElementById('user-deleted-success').hidden = false;#}
+        {#            document.getElementById('user-deleted-danger').hidden = true;#}
+        {#            document.getElementById("facultyTableBody").removeChild(document.getElementById(`user-row-${chatId}`));#}
+        {#        } else {#}
+        {#            document.getElementById('user-deleted-danger').hidden = false;#}
+        {#            document.getElementById('user-deleted-success').hidden = true;#}
+        {##}
+        {#        }#}
+        {#    });#}
+        {#    xhr.send(JSON.stringify({"chat_id": chatId})); }#}
+
+    </script>
+    <script type="module" src="{{ url_for('static', filename='assets/js/campus_guide_page.js') }}"></script>
+{% endblock %}

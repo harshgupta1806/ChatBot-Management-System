@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    USERS
+{% endblock %}
+
+{% block content %}
+    <div class="text-center alert alert-info"
+         role="alert" id="user-loader" hidden>
+        Please Wait ....
+    </div>
+    <div class="text-center alert alert-success"
+         role="alert" id="user-deleted-success" hidden>
+        User Has Been Deleted Successfully.
+    </div>
+    <div class="text-center alert alert-danger"
+         role="alert" id="user-deleted-danger" hidden>
+        User Could Not Be Deleted. Please Try Again Later.
+    </div>
+    <br>
+    <table id="usersTable"
+           class="table table-striped table-hover table-responsive-sm table-responsive-md table-responsive-lg mx-2">
+        <thead>
+        <tr class="bg-primary text-light">
+            <th scope="col">No.</th>
+            <th scope="col">Chat-ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col" class="text-center">Subscribed On (UTC)</th>
+            <th scope="col" class="text-center">Action</th>
+        </tr>
+        </thead>
+        <tbody id="usersTableBody">
+        {% if users is none or users|length == 0 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        {% else %}
+            {% for user in users %}
+                <tr id="user-row-{{ user[0] }}">
+
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user['chat_id'] }}</td>
+                    <td>{{ user['first_name'] }}</td>
+                    <td>{{ user['last_name'] }}</td>
+                    <td>{{ user['created_at'] }}</td>
+                    <td class=" text-center"><span id="{{ user[0] }}" onclick="deleteUser({{ user['chat_id'] }})"
+                                                   class="btn btn-danger"><em
+                            class="mdi mdi-delete-forever"></em>&nbsp;DELETE
+                        USER</span></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+
+        </tbody>
+    </table>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        #usersTable a.btn:hover {
+            transition: all 0.3s ease-in;
+            transform: scale(1.1);
+        }
+
+        input[type="search"] {
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.3rem !important;
+        }
+
+        td {
+            text-transform: capitalize;
+        }
+
+        td:nth-last-child(2) {
+            text-align: center !important;
+        }
+    </style>
+
+{% endblock %}
+
+{% block plugin_js %}
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block custom_js %}
+    <script>
+        const DELETE_USER_URL = 'http://127.0.0.1:8000/user';
+        document.getElementById('user-loader').hidden = true;
+        document.getElementById('user-deleted-success').hidden = true;
+        document.getElementById('user-deleted-danger').hidden = true;
+
+        $(document).ready(function () {
+            $('#usersTable').DataTable();
+        });
+
+        const deleteUser = (chatId) => {
+            console.log(chatId);
+            document.getElementById('user-loader').hidden = false;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('DELETE', DELETE_USER_URL);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.addEventListener('load', () => {
+                document.getElementById('user-loader').hidden = true;
+
+                const response = JSON.parse(xhr.responseText)['result'];
+                if (response) {
+                    document.getElementById('user-deleted-success').hidden = false;
+                    document.getElementById('user-deleted-danger').hidden = true;
+                    document.getElementById("usersTableBody").removeChild(document.getElementById(`user-row-${chatId}`));
+                } else {
+                    document.getElementById('user-deleted-danger').hidden = false;
+                    document.getElementById('user-deleted-success').hidden = true;
+
+                }
+            });
+            xhr.send(JSON.stringify({"chat_id": chatId}));
+        }
+    </script>
+{% endblock %}

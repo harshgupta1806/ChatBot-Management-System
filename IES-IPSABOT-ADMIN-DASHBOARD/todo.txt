@@ -1,0 +1,10 @@
+todo: add javascript in static/js folder
+todo: replace xhr with fetch api and use loaders if possible
+todo: add crud for notes and faculty
+todo: show how many user have subscribed to alert bot
+todo: user can send suggestion/queries to admin -> store it to db using api ->
+        then show it on dashboard -> either respond or resolve or reject
+        -> so add feature of targetted messging to particular chat id by any user
+
+# api has been build so connect to  the api using XHR or fetch whatever is preferred
+todo: add modals to and complete the project
